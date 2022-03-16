@@ -1,0 +1,25 @@
+{
+  "name": "laboleria",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "npx nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teles-tarcisio/la-boleria.git"
+  },
+  "author": "Tarcísio Teles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teles-tarcisio/la-boleria/issues"
+  },
+  "homepage": "https://github.com/teles-tarcisio/la-boleria#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3"
+  }
+}
