@@ -1,8 +1,12 @@
 import { Router } from 'express';
 
-import customersRouter from './customersRouter.js';
+import cakesRouter from './cakesRouter.js';
+
+import clientsRouter from './clientsRouter.js';
+
 
 const mainRouter = Router();
-mainRouter.use(customersRouter);
+mainRouter.use(cakesRouter);
+mainRouter.use(clientsRouter);
 
 export default mainRouter;
