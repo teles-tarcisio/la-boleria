@@ -2,7 +2,10 @@
 import dbConnection from "../database/database.js";
 
 export async function insertCake(req, res) {
-  const { name, price, description, image } = req.body;
+  console.log('-->> res.locals: ', res.locals);
+
+  // const { name, price, description, image } = req.body;
+  /*
   try {
     await dbConnection.query(`
     INSERT INTO cakes (name, price, description, image)
@@ -12,4 +15,5 @@ export async function insertCake(req, res) {
     console.error(error);
     res.status(500).send('!erro! cadastrando novo bolo');
   }
+  */
 }

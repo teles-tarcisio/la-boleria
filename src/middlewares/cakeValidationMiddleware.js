@@ -7,12 +7,17 @@ import { newCakeSchema } from '../schemas/index.js';
 
 export async function cakeValidationMiddleware(req, res, next) {
   const newCakeData = req.body;
-  console.log('reached middleware: ', newCakeData);
-
   const newCakeValidation = newCakeSchema.validate(newCakeData);
+
   if (newCakeValidation.error) {
-    res.status(400).send(newCakeValidation.error.details[0].message);
+    const errorDetails = newCakeValidation.error.details[0];
+    if (errorDetails.path[0] === 'image') {
+      res.status(422).send(errorDetails.message);
+    } else {
+      res.status(400).send(errorDetails.message);
+    }
   }
 
-  // next();
+  res.locals.newCakeData = newCakeValidation.value;
+  next();
 }
