@@ -1,4 +1,6 @@
-CREATE DATABASE "laBoleria";
+-- CREATE DATABASE "laBoleria";
+
+-- CONNECT DATABASE "laBoleria";
 
 CREATE TABLE cakes (
 	id serial NOT NULL,

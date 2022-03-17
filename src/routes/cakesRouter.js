@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+
 import { Router } from 'express';
 
 import { cakeValidationMiddleware } from '../middlewares/index.js';
