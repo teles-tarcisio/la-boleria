@@ -7,8 +7,4 @@ clientsRouter.get('/clients', ((req, res) => {
   res.sendStatus(501);
 }));
 
-
-
-
-
 export default clientsRouter;
