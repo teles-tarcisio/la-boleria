@@ -3,7 +3,7 @@ CREATE DATABASE "laBoleria";
 CREATE TABLE cakes (
 	id serial NOT NULL,
 	name varchar(255) NOT NULL,
-	price integer NOT NULL,
+	price numeric NOT NULL,
 	image varchar(255) NOT NULL UNIQUE,
 	description TEXT NOT NULL,
 	CONSTRAINT "cakes_pk" PRIMARY KEY (id)
