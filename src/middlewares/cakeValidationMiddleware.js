@@ -16,6 +16,6 @@ export async function cakeValidationMiddleware(req, res, next) {
     }
   }
 
-  res.locals.newCakeData = newCakeValidation.value;
+  res.locals.newCakeData = newCakeData;
   next();
 }
