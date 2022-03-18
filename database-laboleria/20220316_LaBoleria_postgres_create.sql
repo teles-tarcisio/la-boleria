@@ -1,7 +1,5 @@
 -- CREATE DATABASE "laBoleria";
 
--- CONNECT DATABASE "laBoleria";
-
 CREATE TABLE cakes (
 	id serial NOT NULL,
 	name varchar(255) NOT NULL,
@@ -30,7 +28,7 @@ CREATE TABLE orders (
 	"clientId" integer NOT NULL,
 	"cakeId" integer NOT NULL,
 	quantity integer NOT NULL,
-	"createdAt" DATE NOT NULL,
+	"createdAt" DATE NOT NULL DEFAULT LOCALTIMESTAMP(0),
 	"totalPrice" numeric NOT NULL,
 	CONSTRAINT "orders_pk" PRIMARY KEY (id)
 ) WITH (
@@ -42,3 +40,5 @@ ALTER TABLE orders ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("clientId") REFERENC
 ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
 
 CREATE EXTENSION IF NOT EXISTS unaccent;
+
+-- CONNECT DATABASE "laBoleria";

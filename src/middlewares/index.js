@@ -2,8 +2,10 @@
 
 import { cakeValidationMiddleware } from './cakeValidationMiddleware.js';
 import { clientValidationMiddleware } from './clientValidationMiddleware.js';
+import { orderValidationMiddleware } from './orderValidationMiddleware.js';
 
 export {
   cakeValidationMiddleware,
   clientValidationMiddleware,
+  orderValidationMiddleware,
 };
