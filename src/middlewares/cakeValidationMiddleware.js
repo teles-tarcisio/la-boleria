@@ -1,8 +1,6 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/prefer-default-export */
 
-import dbConnection from '../database/database.js';
-
 import { newCakeSchema } from '../schemas/index.js';
 
 export async function cakeValidationMiddleware(req, res, next) {

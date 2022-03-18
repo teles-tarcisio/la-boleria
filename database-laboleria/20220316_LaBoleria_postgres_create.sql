@@ -40,3 +40,5 @@ CREATE TABLE orders (
 
 ALTER TABLE orders ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("clientId") REFERENCES clients(id);
 ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
+
+CREATE EXTENSION IF NOT EXISTS unaccent;
