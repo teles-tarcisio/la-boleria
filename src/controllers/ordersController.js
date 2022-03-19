@@ -3,6 +3,8 @@
 
 import dbConnection from '../database/database.js';
 
+import { mapOrdersQueryToObject } from '../utils/index.js';
+
 export async function insertOrder(req, res) {
   const { clientId, cakeId, quantity, totalPrice } = res.locals.newOrderData;
   try {
@@ -42,18 +44,27 @@ export async function insertOrder(req, res) {
 export async function getOrders(req, res) {
   const targetDate = req?.query.date;
 
+  /*
   const { rows: allOrders } = await dbConnection.query('SELECT * FROM orders;');
   console.log(allOrders);
+  */
 
   if (!targetDate) {
-    const { rows: ordersQuery } = await dbConnection.query(
-      `
-      SELECT ord.*, clients.*
-      FROM orders ord
-      JOIN clients ON clients.id=ord."clientId";
-    `);
+    const { rows: ordersQuery } = await dbConnection.query({
+      text: `
+        SELECT cli.id AS "clientId", cli.name AS "clientName", cli.address, cli.phone,
+        ck.id AS "cakeId", ck.name AS "cakeName", ck.description, ck.image,
+        ord."createdAt", ord.quantity, ord."totalPrice"
+        FROM orders ord
+          JOIN clients cli ON cli.id=ord."clientId"
+          JOIN cakes ck ON ck.id=ord."cakeId";
+    `,
+      rowMode: 'array',
+    });
 
-    return res.status(501).send(ordersQuery);
+    const formattedOrders = ordersQuery.map(mapOrdersQueryToObject);
+
+    return res.status(501).send(formattedOrders);
   }
 
   return res.sendStatus(501);
