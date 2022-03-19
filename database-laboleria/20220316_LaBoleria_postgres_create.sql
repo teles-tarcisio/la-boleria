@@ -1,4 +1,6 @@
--- CREATE DATABASE "laBoleria";
+CREATE DATABASE "laBoleria";
+
+CREATE EXTENSION IF NOT EXISTS unaccent;
 
 CREATE TABLE cakes (
 	id serial NOT NULL,
@@ -28,7 +30,7 @@ CREATE TABLE orders (
 	"clientId" integer NOT NULL,
 	"cakeId" integer NOT NULL,
 	quantity integer NOT NULL,
-	"createdAt" DATE NOT NULL DEFAULT LOCALTIMESTAMP(0),
+	"createdAt" TIMESTAMPTZ NOT NULL,
 	"totalPrice" numeric NOT NULL,
 	CONSTRAINT "orders_pk" PRIMARY KEY (id)
 ) WITH (
@@ -38,7 +40,5 @@ CREATE TABLE orders (
 
 ALTER TABLE orders ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("clientId") REFERENCES clients(id);
 ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
-
-CREATE EXTENSION IF NOT EXISTS unaccent;
 
 -- CONNECT DATABASE "laBoleria";

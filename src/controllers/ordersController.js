@@ -1,5 +1,7 @@
+/* eslint-disable import/extensions */
 /* eslint-disable import/prefer-default-export */
-import dbConnection from "../database/database.js";
+
+import dbConnection from '../database/database.js';
 
 export async function insertOrder(req, res) {
   const { clientId, cakeId, quantity, totalPrice } = res.locals.newOrderData;
@@ -28,12 +30,31 @@ export async function insertOrder(req, res) {
       `
       INSERT INTO orders
       ("clientId", "cakeId", quantity, "createdAt", "totalPrice")
-      VALUES ($1, $2, $3, NOW(), $4)`,
+      VALUES ($1, $2, $3, LOCALTIMESTAMP(0), $4)`,
       [clientId, cakeId, quantity, totalPrice],
     );
     return res.sendStatus(201);
   } catch (error) {
-    console.log(error);
     return res.status(500).send('!erro! cadastrando novo pedido');
   }
+}
+
+export async function getOrders(req, res) {
+  const targetDate = req?.query.date;
+
+  const { rows: allOrders } = await dbConnection.query('SELECT * FROM orders;');
+  console.log(allOrders);
+
+  if (!targetDate) {
+    const { rows: ordersQuery } = await dbConnection.query(
+      `
+      SELECT ord.*, clients.*
+      FROM orders ord
+      JOIN clients ON clients.id=ord."clientId";
+    `);
+
+    return res.status(501).send(ordersQuery);
+  }
+
+  return res.sendStatus(501);
 }
