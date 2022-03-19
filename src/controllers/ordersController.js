@@ -53,7 +53,7 @@ export async function getOrders(req, res) {
     const { rows: ordersQuery } = await dbConnection.query({
       text: `
         SELECT cli.id AS "clientId", cli.name AS "clientName", cli.address, cli.phone,
-        ck.id AS "cakeId", ck.name AS "cakeName", ck.description, ck.image,
+        ck.id AS "cakeId", ck.name AS "cakeName", ck.price, ck.description, ck.image,
         ord."createdAt", ord.quantity, ord."totalPrice"
         FROM orders ord
           JOIN clients cli ON cli.id=ord."clientId"

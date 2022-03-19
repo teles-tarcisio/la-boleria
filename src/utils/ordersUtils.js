@@ -1,7 +1,7 @@
 export default function mapOrdersQueryToObject(orderRow) {
   const [
     clientId, clientName, address, phone,
-    cakeId, cakeName, description, image,
+    cakeId, cakeName, price, description, image,
     createdAt, quantity, totalPrice,
   ] = orderRow;
 
@@ -15,6 +15,7 @@ export default function mapOrdersQueryToObject(orderRow) {
     cake: {
       id: cakeId,
       name: cakeName,
+      price,
       description,
       image,
     },
