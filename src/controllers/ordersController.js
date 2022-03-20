@@ -43,29 +43,46 @@ export async function insertOrder(req, res) {
 
 export async function getOrders(req, res) {
   const targetDate = req?.query.date;
-
-  /*
-  const { rows: allOrders } = await dbConnection.query('SELECT * FROM orders;');
-  console.log(allOrders);
-  */
-
+  
   if (!targetDate) {
-    const { rows: ordersQuery } = await dbConnection.query({
+    const { rows: orders } = await dbConnection.query({
       text: `
-        SELECT cli.id AS "clientId", cli.name AS "clientName", cli.address, cli.phone,
-        ck.id AS "cakeId", ck.name AS "cakeName", ck.price, ck.description, ck.image,
-        ord."createdAt", ord.quantity, ord."totalPrice"
+        SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
+        cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
+        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH:MM'), ord.quantity, ord."totalPrice"
         FROM orders ord
-          JOIN clients cli ON cli.id=ord."clientId"
-          JOIN cakes ck ON ck.id=ord."cakeId";
+          JOIN clients ON clients.id=ord."clientId"
+          JOIN cakes ON cakes.id=ord."cakeId";
     `,
       rowMode: 'array',
     });
 
-    const formattedOrders = ordersQuery.map(mapOrdersQueryToObject);
+    if (orders.length === 0) {
+      return res.status(404).send([]);
+    }
 
-    return res.status(501).send(formattedOrders);
+    const formattedOrders = orders.map(mapOrdersQueryToObject);
+    res.status(200).send(formattedOrders);
+  } else {
+    const { rows: ordersByDate } = await dbConnection.query({
+      text: `
+      SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
+      cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
+      TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH:MM'), ord.quantity, ord."totalPrice"
+      FROM orders ord
+        JOIN clients ON clients.id=ord."clientId"
+        JOIN cakes ON cakes.id=ord."cakeId"
+      WHERE ord."createdAt"::text LIKE $1;
+    `,
+      values: [`${targetDate}%`],
+      rowMode: 'array',
+    });
+
+    if (ordersByDate.length === 0) {
+      return res.status(404).send([]);
+    }
+
+    const formattedOrders = ordersByDate.map(mapOrdersQueryToObject);
+    return res.status(200).send(formattedOrders);
   }
-
-  return res.sendStatus(501);
 }
