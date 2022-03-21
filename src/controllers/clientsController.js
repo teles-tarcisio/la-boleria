@@ -41,10 +41,12 @@ export async function getClientOrders(req, res) {
         SELECT orders.id AS "orderId", orders.quantity,
           TO_CHAR(orders."createdAt", 'YYYY-MM-DD HH24:MI'),
           orders."totalPrice",
-          cakes.name
+          cakes.name,
+          flavours.name AS flavour
         FROM orders
           JOIN cakes ON cakes.id=orders."cakeId"
           JOIN clients ON clients.id=orders."clientId"
+          JOIN flavours ON flavours.id=cakes."flavourId"
         WHERE clients.id = $1;
         `,
       values: [clientId],

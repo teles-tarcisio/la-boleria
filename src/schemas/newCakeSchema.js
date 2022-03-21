@@ -5,6 +5,7 @@ const newCakeSchema = Joi.object({
   price: Joi.number().precision(2).min(0.01),
   description: Joi.string().trim().allow(''),
   image: Joi.string().trim().uri(),
+  flavourId: Joi.number().integer().min(1),
 });
 
 export default newCakeSchema;

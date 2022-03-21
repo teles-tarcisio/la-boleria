@@ -50,10 +50,12 @@ export async function getOrders(req, res) {
         text: `
         SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
         cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
-        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
-        FROM orders ord
-          JOIN clients ON clients.id=ord."clientId"
-          JOIN cakes ON cakes.id=ord."cakeId";
+        TO_CHAR(orders."createdAt", 'YYYY-MM-DD HH24:MI'), orders.quantity, orders."totalPrice",
+        flavours.name AS flavour
+        FROM orders
+          JOIN clients ON clients.id=orders."clientId"
+          JOIN cakes ON cakes.id=orders."cakeId"
+          JOIN flavours ON flavours.id=cakes."flavourId";
     `,
         rowMode: 'array',
       });
@@ -69,10 +71,12 @@ export async function getOrders(req, res) {
         text: `
       SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
       cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
-      TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
+      TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice",
+      flavours.name AS flavour
       FROM orders ord
         JOIN clients ON clients.id=ord."clientId"
         JOIN cakes ON cakes.id=ord."cakeId"
+        JOIN flavours ON flavours.id=cakes."flavourId"
       WHERE ord."createdAt"::text LIKE $1;
     `,
         values: [`${targetDate}%`],
@@ -103,10 +107,12 @@ export async function getOrderById(req, res) {
       text: `
         SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
         cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
-        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
+        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice",
+        flavours.name AS flavour
         FROM orders ord
           JOIN clients ON clients.id=ord."clientId"
           JOIN cakes ON cakes.id=ord."cakeId"
+          JOIN flavours ON flavours.id=cakes."flavourId"
         WHERE ord.id = $1;
         `,
       values: [orderId],
