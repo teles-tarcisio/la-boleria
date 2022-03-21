@@ -1,3 +1,5 @@
+-- https://dbdesigner.page.link/iSug9KAC36Rk4kpG7
+
 CREATE DATABASE "laBoleria";
 
 CREATE EXTENSION IF NOT EXISTS unaccent;
@@ -8,7 +10,8 @@ CREATE TABLE cakes (
 	price NUMERIC NOT NULL,
 	image VARCHAR(255) NOT NULL UNIQUE,
 	description TEXT NOT NULL,
-	CONSTRAINT "cakes_pk" PRIMARY KEY (id)
+	CONSTRAINT "cakes_pk" PRIMARY KEY (id),
+	"flavourId" INTEGER NOT NULL
 ) WITH (
   OIDS=FALSE
 );
@@ -37,8 +40,20 @@ CREATE TABLE orders (
   OIDS=FALSE
 );
 
+CREATE TABLE flavours (
+	id SERIAL NOT NULL PRIMARY KEY,
+	name VARCHAR(64) NOT NULL
+) WITH (
+	OIDS=FALSE
+);
 
 ALTER TABLE orders ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("clientId") REFERENCES clients(id);
 ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
+
+ALTER TABLE cakes
+ADD COLUMN "flavourId" INTEGER;
+
+ALTER TABLE cakes ADD CONSTRAINT "cakes_fk0" FOREIGN KEY ("flavourId")
+REFERENCES flavours(id);
 
 -- CONNECT DATABASE "laBoleria";
