@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable import/extensions */
 /* eslint-disable import/prefer-default-export */
 
@@ -43,17 +44,72 @@ export async function insertOrder(req, res) {
 
 export async function getOrders(req, res) {
   const targetDate = req?.query.date;
-  
-  if (!targetDate) {
-    const { rows: orders } = await dbConnection.query({
-      text: `
+  try {
+    if (!targetDate) {
+      const { rows: orders } = await dbConnection.query({
+        text: `
         SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
         cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
-        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH:MM'), ord.quantity, ord."totalPrice"
+        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
         FROM orders ord
           JOIN clients ON clients.id=ord."clientId"
           JOIN cakes ON cakes.id=ord."cakeId";
     `,
+        rowMode: 'array',
+      });
+
+      if (orders.length === 0) {
+        return res.status(404).send([]);
+      }
+
+      const formattedOrders = orders.map(mapOrdersQueryToObject);
+      return res.status(200).send(formattedOrders);
+    } else {
+      const { rows: ordersByDate } = await dbConnection.query({
+        text: `
+      SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
+      cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
+      TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
+      FROM orders ord
+        JOIN clients ON clients.id=ord."clientId"
+        JOIN cakes ON cakes.id=ord."cakeId"
+      WHERE ord."createdAt"::text LIKE $1;
+    `,
+        values: [`${targetDate}%`],
+        rowMode: 'array',
+      });
+
+      if (ordersByDate.length === 0) {
+        return res.status(404).send([]);
+      }
+
+      const formattedOrders = ordersByDate.map(mapOrdersQueryToObject);
+      return res.status(200).send(formattedOrders);
+    }
+  } catch (error) {
+    return res.status(500).send('!erro! obtendo pedidos');
+  }
+}
+
+export async function getOrderById(req, res) {
+  const orderId = parseInt(req?.params.id, 10);
+
+  if (Number.isNaN(orderId)) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const { rows: orders } = await dbConnection.query({
+      text: `
+        SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
+        cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
+        TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH24:MI'), ord.quantity, ord."totalPrice"
+        FROM orders ord
+          JOIN clients ON clients.id=ord."clientId"
+          JOIN cakes ON cakes.id=ord."cakeId"
+        WHERE ord.id = $1;
+        `,
+      values: [orderId],
       rowMode: 'array',
     });
 
@@ -62,27 +118,8 @@ export async function getOrders(req, res) {
     }
 
     const formattedOrders = orders.map(mapOrdersQueryToObject);
-    res.status(200).send(formattedOrders);
-  } else {
-    const { rows: ordersByDate } = await dbConnection.query({
-      text: `
-      SELECT clients.id AS "clientId", clients.name AS "clientName", clients.address, clients.phone,
-      cakes.id AS "cakeId", cakes.name AS "cakeName", cakes.price, cakes.description, cakes.image,
-      TO_CHAR(ord."createdAt", 'YYYY-MM-DD HH:MM'), ord.quantity, ord."totalPrice"
-      FROM orders ord
-        JOIN clients ON clients.id=ord."clientId"
-        JOIN cakes ON cakes.id=ord."cakeId"
-      WHERE ord."createdAt"::text LIKE $1;
-    `,
-      values: [`${targetDate}%`],
-      rowMode: 'array',
-    });
-
-    if (ordersByDate.length === 0) {
-      return res.status(404).send([]);
-    }
-
-    const formattedOrders = ordersByDate.map(mapOrdersQueryToObject);
     return res.status(200).send(formattedOrders);
+  } catch (error) {
+    return res.status(500).send('!erro! obtendo pedidos');
   }
 }
