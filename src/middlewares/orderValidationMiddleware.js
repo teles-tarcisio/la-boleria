@@ -9,9 +9,9 @@ export async function orderValidationMiddleware(req, res, next) {
 
   if (newOrderValidation.error) {
     const errorDetails = newOrderValidation.error.details[0];
-    res.status(400).send(errorDetails.message);
+    return res.status(400).send(errorDetails.message);
   }
 
   res.locals.newOrderData = newOrderData;
-  next();
+  return next();
 }

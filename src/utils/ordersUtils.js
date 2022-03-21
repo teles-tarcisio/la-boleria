@@ -4,6 +4,7 @@ export function mapOrdersQueryToObject(orderRow) {
     cakeId, cakeName, price, description, image,
     createdAt, quantity, totalPrice,
     flavour,
+    isDelivered,
   ] = orderRow;
 
   return {
@@ -24,6 +25,7 @@ export function mapOrdersQueryToObject(orderRow) {
     createdAt,
     quantity,
     totalPrice,
+    isDelivered,
   };
 }
 
@@ -32,6 +34,7 @@ export function mapClientOrdersToObject(orderRow) {
     orderId, quantity, createdAt, totalPrice,
     name,
     flavour,
+    isDelivered,
   ] = orderRow;
 
   return {
@@ -41,5 +44,6 @@ export function mapClientOrdersToObject(orderRow) {
     totalPrice,
     name,
     flavour,
+    isDelivered,
   };
 }

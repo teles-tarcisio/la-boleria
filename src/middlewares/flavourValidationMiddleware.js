@@ -9,9 +9,9 @@ export async function flavourValidationMiddleware(req, res, next) {
 
   if (newFlavourValidation.error) {
     const errorDetails = newFlavourValidation.error.details[0];
-    res.status(400).send(errorDetails.message);
+    return res.status(400).send(errorDetails.message);
   }
 
   res.locals.newFlavourData = newFlavourValidation.value;
-  next();
+  return next();
 }

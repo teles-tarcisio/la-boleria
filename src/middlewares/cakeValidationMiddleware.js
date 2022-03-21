@@ -10,12 +10,11 @@ export async function cakeValidationMiddleware(req, res, next) {
   if (newCakeValidation.error) {
     const errorDetails = newCakeValidation.error.details[0];
     if (errorDetails.path[0] === 'image') {
-      res.status(422).send(errorDetails.message);
+      return res.status(422).send(errorDetails.message);
     } else {
-      res.status(400).send(errorDetails.message);
+      return res.status(400).send(errorDetails.message);
     }
   }
-
   res.locals.newCakeData = newCakeData;
-  next();
+  return next();
 }

@@ -12,5 +12,5 @@ export async function clientValidationMiddleware(req, res, next) {
     return res.status(400).send(errorDetails.message);
   }
   res.locals.newClientData = newClientData;
-  next();
+  return next();
 }
