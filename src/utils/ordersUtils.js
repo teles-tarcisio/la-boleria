@@ -1,4 +1,4 @@
-export default function mapOrdersQueryToObject(orderRow) {
+export function mapOrdersQueryToObject(orderRow) {
   const [
     clientId, clientName, address, phone,
     cakeId, cakeName, price, description, image,
@@ -22,5 +22,20 @@ export default function mapOrdersQueryToObject(orderRow) {
     createdAt,
     quantity,
     totalPrice,
+  };
+}
+
+export function mapClientOrdersToObject(orderRow) {
+  const [
+    orderId, quantity, createdAt, totalPrice,
+    name,
+  ] = orderRow;
+
+  return {
+    orderId,
+    quantity,
+    createdAt,
+    totalPrice,
+    name,
   };
 }

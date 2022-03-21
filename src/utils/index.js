@@ -1,7 +1,8 @@
 /* eslint-disable import/extensions */
 
-import mapOrdersQueryToObject from './ordersUtils.js';
+import { mapOrdersQueryToObject, mapClientOrdersToObject } from './ordersUtils.js';
 
 export {
   mapOrdersQueryToObject,
+  mapClientOrdersToObject,
 };
