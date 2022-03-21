@@ -3,10 +3,10 @@ CREATE DATABASE "laBoleria";
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 CREATE TABLE cakes (
-	id serial NOT NULL,
-	name varchar(255) NOT NULL,
-	price numeric NOT NULL,
-	image varchar(255) NOT NULL UNIQUE,
+	id SERIAL NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	price NUMERIC NOT NULL,
+	image VARCHAR(255) NOT NULL UNIQUE,
 	description TEXT NOT NULL,
 	CONSTRAINT "cakes_pk" PRIMARY KEY (id)
 ) WITH (
@@ -15,10 +15,10 @@ CREATE TABLE cakes (
 
 
 CREATE TABLE clients (
-	id serial NOT NULL,
-	name varchar(255) NOT NULL,
-	address varchar(255) NOT NULL,
-	phone varchar(11) NOT NULL,
+	id SERIAL NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	address VARCHAR(255) NOT NULL,
+	phone VARCHAR(11) NOT NULL,
 	CONSTRAINT "clients_pk" PRIMARY KEY (id)
 ) WITH (
   OIDS=FALSE
@@ -26,12 +26,12 @@ CREATE TABLE clients (
 
 
 CREATE TABLE orders (
-	id serial NOT NULL,
-	"clientId" integer NOT NULL,
-	"cakeId" integer NOT NULL,
-	quantity integer NOT NULL,
+	id SERIAL NOT NULL,
+	"clientId" INTEGER NOT NULL,
+	"cakeId" INTEGER NOT NULL,
+	quantity INTEGER NOT NULL,
 	"createdAt" TIMESTAMPTZ NOT NULL,
-	"totalPrice" numeric NOT NULL,
+	"totalPrice" NUMERIC NOT NULL,
 	CONSTRAINT "orders_pk" PRIMARY KEY (id)
 ) WITH (
   OIDS=FALSE
