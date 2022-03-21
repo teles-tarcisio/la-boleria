@@ -129,3 +129,34 @@ export async function getOrderById(req, res) {
     return res.status(500).send('!erro! obtendo pedidos');
   }
 }
+
+export async function changeOrderStatus(req, res) {
+  const orderId = parseInt(req?.params.id, 10);
+
+  if (Number.isNaN(orderId)) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const { rows: foundOrders } = await dbConnection.query(
+      `
+      SELECT * FROM orders
+      WHERE id = $1`,
+      [orderId],
+    );
+    if (foundOrders.length === 0) {
+      return res.status(404).send('Não existe pedido com id informado');
+    }
+
+    await dbConnection.query(
+      `
+      UPDATE orders
+      SET "isDelivered"=true
+      WHERE id=$1;`,
+      [orderId],
+    );
+    return res.sendStatus(204);
+  } catch (error) {
+    return res.status(500).send('!erro! alterando status de pedido');
+  }
+}
