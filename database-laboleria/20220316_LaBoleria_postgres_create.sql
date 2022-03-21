@@ -49,12 +49,8 @@ CREATE TABLE flavours (
 );
 
 ALTER TABLE orders ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("clientId") REFERENCES clients(id);
-ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
 
---ALTER TABLE cakes
---ADD COLUMN "flavourId" INTEGER;
+ALTER TABLE orders ADD CONSTRAINT "orders_fk1" FOREIGN KEY ("cakeId") REFERENCES cakes(id);
 
 ALTER TABLE cakes ADD CONSTRAINT "cakes_fk0" FOREIGN KEY ("flavourId")
 REFERENCES flavours(id);
-
--- CONNECT DATABASE "laBoleria";
